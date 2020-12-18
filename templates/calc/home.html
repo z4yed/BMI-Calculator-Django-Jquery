@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="container">
+
+      <div class="jumbotron text-center">
+
+          <h2>Simple BMI Calculator</h2>
+
+      </div>
+
+      <div class="jumbotron" style="background-color: #39473a">
+          <form action="">
+                  <div class="row">
+                      <div class="col-3"></div>
+                      <div class="col-6">
+                          <h6 class="text-light">Your Weight(KG)</h6>
+                          <input type="text" id="weight" class="form-control floatField" required>
+                      </div>
+                      <div class="col-3"></div>
+
+                  </div>
+                  <div class="row mt-3">
+                      <div class="col-3"></div>
+                      <div class="col-6">
+                          <h6 class="text-light">Your Height</h6>
+                          <div class="row">
+                              <div class="col-5">
+                                  <label for="feet" class="text-light">Feet</label>
+                                  <input type="text" id="feet" class="form-control numberField" required>
+                              </div>
+                              <div class="col-5">
+                                  <label for="inch" class="text-light">Inch</label>
+                                  <input type="text" id="inch" class="form-control floatField" required>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-3"></div>
+
+                  </div>
+
+                  <div class="row mt-3">
+                       <div class="col-3"></div>
+                      <div class="col-2 ">
+                          <button type="button" id="calculate" class="btn btn-success btn-outline"> Calculate</button>
+                      </div>
+                      <div class="col-4 mt-1">
+                          <h5 class="text-light" id="message"></h5>
+                      </div>
+                  </div>
+              </form>
+
+      </div>
+
+    </div>
+
+{% endblock %}
+
+{% block script %}
+
+    <script>
+
+    $(document).ready(function(){
+
+        $(".numberField").keypress(function(e){
+
+            if ((e.which < 48 || e.which > 57)) {
+              return false;
+            }
+        });
+        $(".floatField").keypress(function(e){
+
+            if(e.which == 46){
+                return true;
+            }
+            if ((e.which < 48 || e.which > 57)) {
+              return false;
+            }
+        });
+
+        $("#calculate").on("click", function(){
+            let weight = parseFloat($("#weight").val())
+            let feet = $("#feet").val();
+            let inch = $("#inch").val();
+            feet = parseFloat(feet);
+            inch = parseFloat(inch);
+
+
+            let height_in_meter = (feet * 12 + inch) * 0.0254;
+            let bmi = weight / (height_in_meter * height_in_meter);
+
+            console.log(weight, feet, bmi);
+
+            let status = undefined;
+            if(bmi<18.5){
+                status = "Underweight";
+            }
+            else if(bmi >= 18.5 && bmi < 25){
+                status = "Normal";
+            }
+            else if(bmi > 25 && bmi < 29.9){
+                status = "Overweight"
+            }
+            else if(bmi > 30){
+                status = "Obesity"
+            }
+            else{
+                status = "Invalid Input";
+            }
+            if(weight, feet, inch){
+              $("#message").text('Your BMI is : ' + bmi.toFixed(3) + '  ('+ status +')');
+            }
+        })
+
+    });
+
+    </script>
+
+{% endblock %}
